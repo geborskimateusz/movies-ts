@@ -6,11 +6,12 @@ interface RouterDependencies {
 }
 
 enum Routes {
-    FindById = "/findById"
+    FindById = "/create"
 }
 
 export default function createRouter({ movieController }: RouterDependencies) {
     const router: express.Router = express.Router();
-    router.get(Routes.FindById, movieController.findById.bind(movieController))
+    router.use(express.json());
+    router.post(Routes.FindById, movieController.findById.bind(movieController))
     return router; 
 }

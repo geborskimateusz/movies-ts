@@ -1,6 +1,21 @@
+import { AwilixContainer } from "awilix";
+import { getConnection, getRepository, Repository } from "typeorm";
+import MovieEntity from "./entities/movie";
+import Movie from "./movie";
+
 export default class MovieService {
 
-    findById(id: number): string {
-        return `Found user witha id ${id}`;
+    movieRepository: Repository<MovieEntity>; 
+
+    constructor() {
+        this.movieRepository = getRepository(MovieEntity);
+    }
+    
+    create(movie: Movie): Promise<MovieEntity>{
+        return this.movieRepository.save(movie); 
+    }
+
+    async find(id: number): Promise<MovieEntity> {
+        return this.movieRepository.findOneOrFail(id);
     }
 }

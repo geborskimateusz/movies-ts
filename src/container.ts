@@ -21,7 +21,7 @@ export async function createContainer(): Promise<AwilixContainer> {
         expressServer: awillix.asFunction(createServer),
     });
 
-    // console.log('Modules loaded:', Object.keys(container.registrations));
+    console.log('Modules loaded:', Object.keys(container.registrations));
 
     return container;
 }
