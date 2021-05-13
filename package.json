@@ -20,6 +20,9 @@
   },
   "homepage": "https://github.com/geborskimateusz/movies-ts#readme",
   "dependencies": {
+    "@tshio/awilix-resolver": "^1.0.2",
+    "@tshio/command-bus": "^1.0.3",
+    "@tshio/event-dispatcher": "^1.0.2",
     "awilix": "^4.3.3",
     "body-parser": "^1.19.0",
     "chai": "^4.3.4",

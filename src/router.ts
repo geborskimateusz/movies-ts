@@ -1,17 +1,17 @@
 import express = require("express");
-import MovieController from "./movie-controller";
+import { Action } from "./types";
 
 interface RouterDependencies {
-    movieController: MovieController,
+    createMovieAction: Action
 }
 
 enum Routes {
-    FindById = "/create"
+    CREATE = "/create"
 }
 
-export default function createRouter({ movieController }: RouterDependencies) {
+export default function createRouter(actions: RouterDependencies) {
     const router: express.Router = express.Router();
     router.use(express.json());
-    router.post(Routes.FindById, movieController.findById.bind(movieController))
+    router.post(Routes.CREATE, actions.createMovieAction.invoke.bind(actions.createMovieAction));
     return router; 
 }
