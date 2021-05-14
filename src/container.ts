@@ -9,6 +9,7 @@ import { registerDatabase } from "./database";
 import MovieService from "./movie-service";
 import createRouter from "./router";
 import createServer from "./server";
+import { createLogger } from "@tshio/logger";
 
 export async function createContainer(): Promise<AwilixContainer> {
     const container: AwilixContainer = awillix.createContainer({
@@ -19,12 +20,16 @@ export async function createContainer(): Promise<AwilixContainer> {
     await registerDatabase(container);
 
     container.register({
+        logger: awillix.asValue(createLogger(process.env, ["accessToken", "refreshToken"])),
+        eventSubscribers: asArray<any>([
+            awillix.asClass(MovieService).singleton(),
+        ]),
         eventDispatcher: awillix.asClass(EventDispatcher).classic().singleton(),
         commandBus: awillix.asClass(CommandBus).classic().singleton(),
         commandHandlers: asArray<any>([
             awillix.asClass(CreateMovieHandler)
         ]),
-        movieService: awillix.asClass(MovieService),
+        // movieService: awillix.asClass(MovieService),
         createMovieAction: awillix.asClass(CreateMovieAction),
         router: awillix.asFunction(createRouter),
         expressServer: awillix.asFunction(createServer),

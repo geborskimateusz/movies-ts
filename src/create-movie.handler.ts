@@ -15,10 +15,8 @@ export default class CreateMovieHandler implements CommandHandler<CreateMovieCom
     }
 
     async execute(command: CreateMovieCommand) {
-        console.log("In create movie handler");
-        console.log(command);
 
-        this.eventDispatcher.dispatch({
+        await this.eventDispatcher.dispatch({
             name: "MovieCreated",
             payload: command,
         })

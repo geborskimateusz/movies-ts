@@ -4,18 +4,22 @@ import { getConnection, getRepository, Repository } from "typeorm";
 import MovieEntity from "./entities/movie";
 import Movie from "./movie";
 import { Event, EventSubscriberInterface, EventSubscribersMeta } from "@tshio/event-dispatcher";
+import { CreateMovieCommandPayload } from "./create-movie.command";
+import { convertToObject } from "typescript";
 
-
-export interface MovieServiceDependencies {
-    eventDispatcher: EventDispatcher;
+export type MovieEvent = & {
+    payload: {
+        payload: {
+            movie: Movie
+        }
+    }
 }
 
 export default class MovieService implements EventSubscriberInterface {
 
     movieRepository: Repository<MovieEntity>;
 
-
-    constructor({ eventDispatcher }: MovieServiceDependencies) {
+    constructor() {
         this.movieRepository = getRepository(MovieEntity);
     }
 
@@ -23,13 +27,18 @@ export default class MovieService implements EventSubscriberInterface {
         return [{ name: "MovieCreated", method: "create" }];
     }
 
-    create(event: Event)  {
-        console.log("in listener");
-        console.log(event.payload);
-        //  this.movieRepository.save(movie);
+    public async create(event: MovieEvent) {
+
+        const moviePayload = event.payload;
+        console.log(moviePayload.payload.movie)
     }
 
-    async find(id: number): Promise < MovieEntity > {
+    async find(id: number): Promise<MovieEntity> {
         return this.movieRepository.findOneOrFail(id);
+    }
+
+    hasOwnProperty<X extends {}, Y extends PropertyKey>
+        (obj: X, prop: Y): obj is X & Record<Y, unknown> {
+        return obj.hasOwnProperty(prop)
     }
 }
