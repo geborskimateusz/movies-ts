@@ -20,7 +20,7 @@ export default class MovieService implements EventSubscriberInterface {
     }
 
     getSubscribedEvents(): EventSubscribersMeta[] {
-        return [{ name: "MovieCreated", method: "create" }, { name: "MovieFoundById", method: "find" }];
+        return [{ name: "MovieCreated", method: "create" }];
     }
 
     public async create(event: MovieEvent) {
