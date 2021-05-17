@@ -12,6 +12,7 @@ class CreateMovieAction implements Action {
     constructor(private dependencies: CreateMovieActionDependencies) {}
 
     async invoke({ body }: Request, res: Response) {
+        console.log(body)
         const result = await this.dependencies.commandBus.execute(
             new CreateMovieCommand({
                 movie: body
