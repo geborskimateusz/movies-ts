@@ -1,21 +1,31 @@
-import { AwilixContainer } from "awilix";
-import { getConnection, getRepository, Repository } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 import MovieEntity from "./entities/movie";
 import Movie from "./movie";
+import { EventSubscriberInterface, EventSubscribersMeta } from "@tshio/event-dispatcher";
 
-export default class MovieService {
+export type MovieEvent = & {
+    payload: {
+        payload: {
+            movie: Movie
+        }
+    }
+}
 
-    movieRepository: Repository<MovieEntity>; 
+export default class MovieService implements EventSubscriberInterface {
+
+    movieRepository: Repository<MovieEntity>;
 
     constructor() {
         this.movieRepository = getRepository(MovieEntity);
     }
-    
-    create(movie: Movie): Promise<MovieEntity>{
-        return this.movieRepository.save(movie); 
+
+    getSubscribedEvents(): EventSubscribersMeta[] {
+        return [{ name: "MovieCreated", method: "create" }];
     }
 
-    async find(id: number): Promise<MovieEntity> {
-        return this.movieRepository.findOneOrFail(id);
+    public async create(event: MovieEvent) {
+        const movieCommandPayload = event.payload;
+        const movie: Movie = movieCommandPayload.payload.movie;
+        await this.movieRepository.save(movie);
     }
 }
